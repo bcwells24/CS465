@@ -122,9 +122,34 @@ const tripsAddTrip = async (req, res) => {
      console.log(q);
   };
 
+  const tripsDeleteTrip = async (req, res) => {
+    // Uncomment for debugging
+    // console.log(req.params);
+
+    try {
+        const deletedTrip = await Model.findOneAndDelete({ 'code': req.params.tripCode }).exec();
+
+        if (!deletedTrip) {
+            return res.status(404).json({ message: "Trip not found" });
+        }
+
+        // Return the deleted trip
+        return res.status(200).json(deletedTrip);
+
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Server error", error: err.message });
+    }
+
+    // Uncomment the following line to show results of operation
+    // on the console
+     console.log(deletedTrip);
+};
+
 module.exports = {
     tripsList,
     tripsFindByCode,
     tripsAddTrip,
-    tripsUpdateTrip
+    tripsUpdateTrip,
+    tripsDeleteTrip
 };
